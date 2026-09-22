@@ -1,181 +1,179 @@
 <div class="flight-details-panel h-full flex flex-column overflow-y-auto">
   @if (selectedFlight$ | async; as flight) {
-    <div class="p-3 flex flex-column gap-3">
-      <!-- Top Action Bar: Deselect / Close button -->
-      <div class="flex justify-content-between align-items-center">
-        <p-button
-          severity="secondary"
-          size="small"
-          [text]="true"
-          (onClick)="onCloseDetails()"
-          aria-label="Back to all flights">
-          <ng-template #default>
-            <div class="flex align-items-center gap-2">
-              <fa-icon [icon]="faArrowLeft"></fa-icon>
-              <span>All Flights</span>
-            </div>
-          </ng-template>
+  <div class="p-3 flex flex-column gap-3">
+    <!-- Top Action Bar: Deselect / Close button -->
+    <div class="flex justify-content-between align-items-center">
+
+      <!-- Back to All Flights -->
+      <p-button severity="secondary" size="small" [text]="true" (onClick)="onCloseDetails()"
+        aria-label="Back to all flights">
+        <div class="flex align-items-center gap-2">
+          <fa-icon [icon]="faArrowLeft"></fa-icon>
+          <span>All Flights</span>
+        </div>
+      </p-button>
+
+      <!-- Playback Simulation Toggle in Details -->
+      <div class="flex align-items-center gap-1">
+        <p-button [severity]="(isSimulationRunning$ | async) ? 'success' : 'secondary'" size="small" [outlined]="true"
+          (onClick)="toggleSimulation()">
+          <div class="flex align-items-center gap-2">
+            <fa-icon [icon]="(isSimulationRunning$ | async) ? faPause : faPlay">
+            </fa-icon>
+
+            <span>
+              {{ (isSimulationRunning$ | async) ? 'Live Tracking' : 'Play Sim' }}
+            </span>
+          </div>
         </p-button>
-
-        <!-- Playback Simulation Toggle in Details -->
-        <div class="flex align-items-center gap-1">
-          <p-button
-            [severity]="(isSimulationRunning$ | async) ? 'success' : 'secondary'"
-            size="small"
-            [outlined]="true"
-            (onClick)="toggleSimulation()">
-            <ng-template #default>
-              <div class="flex align-items-center gap-2">
-                <fa-icon [icon]="(isSimulationRunning$ | async) ? faPause : faPlay"></fa-icon>
-                <span>{{ (isSimulationRunning$ | async) ? 'Live Tracking' : 'Play Sim' }}</span>
-              </div>
-            </ng-template>
-          </p-button>
-        </div>
       </div>
 
-      <!-- Flight Header Banner -->
-      <div class="flight-hero-card p-3 border-round-lg">
-        <div class="flex justify-content-between align-items-start mb-2">
-          <div>
-            <div class="flex align-items-center gap-2">
-              <h2 class="text-2xl font-extrabold font-mono text-primary m-0">{{ flight.flightNumber }}</h2>
-              <span class="text-xs font-mono text-muted bg-surface-tertiary px-2 py-1 border-round">{{ flight.callsign }}</span>
-            </div>
-            <div class="text-xs text-secondary mt-1 font-medium">{{ flight.airline }}</div>
-          </div>
-          <app-status-badge [status]="flight.status" size="normal"></app-status-badge>
-        </div>
-
-        <!-- Aircraft info -->
-        <div class="flex align-items-center gap-2 text-xs font-mono text-muted pt-2 border-top-1 border-subtle">
-          <fa-icon [icon]="faShieldHalved" class="text-sky-400"></fa-icon>
-          <span>{{ flight.aircraft.model }} ({{ flight.aircraft.typeCode }})</span>
-          <span>&bull;</span>
-          <span>Reg: <strong>{{ flight.aircraft.registration }}</strong></span>
-        </div>
-      </div>
-
-      <!-- Route & Schedule Progression Card -->
-      <div class="route-progression-card p-3 border-round-lg">
-        <div class="grid grid-nogutter align-items-center mb-3">
-          <!-- Origin Airport -->
-          <div class="col-5">
-            <div class="text-xs text-muted uppercase font-semibold">Origin</div>
-            <div class="text-xl font-black font-mono text-primary">{{ flight.originAirport.iata }}</div>
-            <div class="text-xs text-secondary">{{ flight.originAirport.city }}</div>
-            <div class="text-xs font-mono text-muted mt-2">
-              Gate: <strong class="text-primary">{{ flight.gate || 'TBD' }}</strong>
-            </div>
-            <div class="text-xs font-mono text-muted">
-              Dep: <strong class="text-primary">{{ flight.actualDeparture || flight.scheduledDeparture | date:'HH:mm UTC' }}</strong>
-            </div>
-          </div>
-
-          <!-- Route Center Distance & Icon -->
-          <div class="col-2 text-center flex flex-column align-items-center">
-            <fa-icon [icon]="faPlaneDeparture" class="text-lg text-sky-400"></fa-icon>
-            <div class="text-xs font-mono text-muted mt-1">{{ flight.distanceNm }} nm</div>
-          </div>
-
-          <!-- Destination Airport -->
-          <div class="col-5 text-right">
-            <div class="text-xs text-muted uppercase font-semibold">Destination</div>
-            <div class="text-xl font-black font-mono text-primary">{{ flight.destinationAirport.iata }}</div>
-            <div class="text-xs text-secondary">{{ flight.destinationAirport.city }}</div>
-            <div class="text-xs font-mono text-muted mt-2">
-              Term: <strong class="text-primary">{{ flight.terminal || '1' }}</strong>
-            </div>
-            <div class="text-xs font-mono text-muted">
-              Arr: <strong class="text-primary">{{ flight.estimatedArrival | date:'HH:mm UTC' }}</strong>
-            </div>
-          </div>
-        </div>
-
-        <!-- Route Flight Progress Bar -->
-        <div class="mt-2">
-          <div class="flex justify-content-between text-xs font-mono text-muted mb-1">
-            <span>Flight Progress</span>
-            <span class="text-sky-400 font-bold">{{ flight.telemetry.progressPct }}%</span>
-          </div>
-          <p-progressbar [value]="flight.telemetry.progressPct" [showValue]="false" styleClass="h-6px"></p-progressbar>
-        </div>
-      </div>
-
-      <!-- Live Telemetry Instrument Panel -->
-      <div class="telemetry-grid">
-        <div class="text-xs uppercase font-bold tracking-wider text-muted mb-2 flex align-items-center gap-2">
-          <fa-icon [icon]="faGaugeHigh" class="text-sky-400"></fa-icon>
-          <span>Live Telemetry</span>
-        </div>
-
-        <div class="grid grid-nogutter gap-2">
-          <!-- Altitude -->
-          <div class="col instrument-card p-2 border-round">
-            <div class="text-xs text-muted">Altitude</div>
-            <div class="text-base font-bold font-mono text-primary">
-              {{ flight.telemetry.altitudeFt.toLocaleString() }} <span class="text-xs text-muted font-sans">ft</span>
-            </div>
-            <div class="text-xs font-mono" [ngClass]="flight.telemetry.verticalRateFpm < 0 ? 'text-amber-400' : 'text-green-400'">
-              {{ flight.telemetry.verticalRateFpm > 0 ? '+' : '' }}{{ flight.telemetry.verticalRateFpm }} fpm
-            </div>
-          </div>
-
-          <!-- Ground Speed -->
-          <div class="col instrument-card p-2 border-round">
-            <div class="text-xs text-muted">Ground Speed</div>
-            <div class="text-base font-bold font-mono text-primary">
-              {{ flight.telemetry.groundSpeedKts }} <span class="text-xs text-muted font-sans">kts</span>
-            </div>
-            <div class="text-xs font-mono text-muted">
-              {{ (flight.telemetry.groundSpeedKts * 1.852).toFixed(0) }} km/h
-            </div>
-          </div>
-        </div>
-
-        <div class="grid grid-nogutter gap-2 mt-2">
-          <!-- Heading -->
-          <div class="col instrument-card p-2 border-round">
-            <div class="text-xs text-muted">Heading</div>
-            <div class="text-base font-bold font-mono text-primary flex align-items-center gap-2">
-              <span>{{ flight.telemetry.headingDeg }}&deg;</span>
-              <fa-icon [icon]="faCompass" class="text-xs text-sky-400"></fa-icon>
-            </div>
-            <div class="text-xs font-mono text-muted">
-              {{ getCompassDirection(flight.telemetry.headingDeg) }}
-            </div>
-          </div>
-
-          <!-- Coordinates -->
-          <div class="col instrument-card p-2 border-round">
-            <div class="text-xs text-muted">Position</div>
-            <div class="text-xs font-bold font-mono text-primary">
-              {{ flight.telemetry.currentLatitude.toFixed(2) }}&deg;, {{ flight.telemetry.currentLongitude.toFixed(2) }}&deg;
-            </div>
-            <div class="text-xs font-mono text-muted">
-              {{ flight.telemetry.lastUpdated | date:'HH:mm:ss' }} UTC
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Operations Remarks & Oceanic Clearance -->
-      @if (flight.remarks) {
-        <div class="remarks-box p-3 border-round-lg text-xs line-height-3">
-          <div class="font-bold text-sky-400 mb-1 flex align-items-center gap-2">
-            <fa-icon [icon]="faCircleInfo"></fa-icon>
-            <span>Operations Dispatch Note</span>
-          </div>
-          <div class="text-secondary">{{ flight.remarks }}</div>
-        </div>
-      }
     </div>
+
+    <!-- Flight Header Banner -->
+    <div class="flight-hero-card p-3 border-round-lg">
+      <div class="flex justify-content-between align-items-start mb-2">
+        <div>
+          <div class="flex align-items-center gap-2">
+            <h2 class="text-2xl font-extrabold font-mono text-primary m-0">{{ flight.flightNumber }}</h2>
+            <span class="text-xs font-mono text-muted bg-surface-tertiary px-2 py-1 border-round">{{ flight.callsign
+              }}</span>
+          </div>
+          <div class="text-xs text-secondary mt-1 font-medium">{{ flight.airline }}</div>
+        </div>
+        <app-status-badge [status]="flight.status" size="normal"></app-status-badge>
+      </div>
+
+      <!-- Aircraft info -->
+      <div class="flex align-items-center gap-2 text-xs font-mono text-muted pt-2 border-top-1 border-subtle">
+        <fa-icon [icon]="faShieldHalved" class="text-sky-400"></fa-icon>
+        <span>{{ flight.aircraft.model }} ({{ flight.aircraft.typeCode }})</span>
+        <span>&bull;</span>
+        <span>Reg: <strong>{{ flight.aircraft.registration }}</strong></span>
+      </div>
+    </div>
+
+    <!-- Route & Schedule Progression Card -->
+    <div class="route-progression-card p-3 border-round-lg">
+      <div class="grid grid-nogutter align-items-center mb-3">
+        <!-- Origin Airport -->
+        <div class="col-5">
+          <div class="text-xs text-muted uppercase font-semibold">Origin</div>
+          <div class="text-xl font-black font-mono text-primary">{{ flight.originAirport.iata }}</div>
+          <div class="text-xs text-secondary">{{ flight.originAirport.city }}</div>
+          <div class="text-xs font-mono text-muted mt-2">
+            Gate: <strong class="text-primary">{{ flight.gate || 'TBD' }}</strong>
+          </div>
+          <div class="text-xs font-mono text-muted">
+            Dep: <strong class="text-primary">{{ flight.actualDeparture || flight.scheduledDeparture | date:'HH:mm UTC'
+              }}</strong>
+          </div>
+        </div>
+
+        <!-- Route Center Distance & Icon -->
+        <div class="col-2 text-center flex flex-column align-items-center">
+          <fa-icon [icon]="faPlaneDeparture" class="text-lg text-sky-400"></fa-icon>
+          <div class="text-xs font-mono text-muted mt-1">{{ flight.distanceNm }} nm</div>
+        </div>
+
+        <!-- Destination Airport -->
+        <div class="col-5 text-right">
+          <div class="text-xs text-muted uppercase font-semibold">Destination</div>
+          <div class="text-xl font-black font-mono text-primary">{{ flight.destinationAirport.iata }}</div>
+          <div class="text-xs text-secondary">{{ flight.destinationAirport.city }}</div>
+          <div class="text-xs font-mono text-muted mt-2">
+            Term: <strong class="text-primary">{{ flight.terminal || '1' }}</strong>
+          </div>
+          <div class="text-xs font-mono text-muted">
+            Arr: <strong class="text-primary">{{ flight.estimatedArrival | date:'HH:mm UTC' }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Route Flight Progress Bar -->
+      <div class="mt-2">
+        <div class="flex justify-content-between text-xs font-mono text-muted mb-1">
+          <span>Flight Progress</span>
+          <span class="text-sky-400 font-bold">{{ flight.telemetry.progressPct }}%</span>
+        </div>
+        <p-progressbar [value]="flight.telemetry.progressPct" [showValue]="false" styleClass="h-6px"></p-progressbar>
+      </div>
+    </div>
+
+    <!-- Live Telemetry Instrument Panel -->
+    <div class="telemetry-grid">
+      <div class="text-xs uppercase font-bold tracking-wider text-muted mb-2 flex align-items-center gap-2">
+        <fa-icon [icon]="faGaugeHigh" class="text-sky-400"></fa-icon>
+        <span>Live Telemetry</span>
+      </div>
+
+      <div class="grid grid-nogutter gap-2">
+        <!-- Altitude -->
+        <div class="col instrument-card p-2 border-round">
+          <div class="text-xs text-muted">Altitude</div>
+          <div class="text-base font-bold font-mono text-primary">
+            {{ flight.telemetry.altitudeFt.toLocaleString() }} <span class="text-xs text-muted font-sans">ft</span>
+          </div>
+          <div class="text-xs font-mono"
+            [ngClass]="flight.telemetry.verticalRateFpm < 0 ? 'text-amber-400' : 'text-green-400'">
+            {{ flight.telemetry.verticalRateFpm > 0 ? '+' : '' }}{{ flight.telemetry.verticalRateFpm }} fpm
+          </div>
+        </div>
+
+        <!-- Ground Speed -->
+        <div class="col instrument-card p-2 border-round">
+          <div class="text-xs text-muted">Ground Speed</div>
+          <div class="text-base font-bold font-mono text-primary">
+            {{ flight.telemetry.groundSpeedKts }} <span class="text-xs text-muted font-sans">kts</span>
+          </div>
+          <div class="text-xs font-mono text-muted">
+            {{ (flight.telemetry.groundSpeedKts * 1.852).toFixed(0) }} km/h
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-nogutter gap-2 mt-2">
+        <!-- Heading -->
+        <div class="col instrument-card p-2 border-round">
+          <div class="text-xs text-muted">Heading</div>
+          <div class="text-base font-bold font-mono text-primary flex align-items-center gap-2">
+            <span>{{ flight.telemetry.headingDeg }}&deg;</span>
+            <fa-icon [icon]="faCompass" class="text-xs text-sky-400"></fa-icon>
+          </div>
+          <div class="text-xs font-mono text-muted">
+            {{ getCompassDirection(flight.telemetry.headingDeg) }}
+          </div>
+        </div>
+
+        <!-- Coordinates -->
+        <div class="col instrument-card p-2 border-round">
+          <div class="text-xs text-muted">Position</div>
+          <div class="text-xs font-bold font-mono text-primary">
+            {{ flight.telemetry.currentLatitude.toFixed(2) }}&deg;, {{ flight.telemetry.currentLongitude.toFixed(2)
+            }}&deg;
+          </div>
+          <div class="text-xs font-mono text-muted">
+            {{ flight.telemetry.lastUpdated | date:'HH:mm:ss' }} UTC
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Operations Remarks & Oceanic Clearance -->
+    @if (flight.remarks) {
+    <div class="remarks-box p-3 border-round-lg text-xs line-height-3">
+      <div class="font-bold text-sky-400 mb-1 flex align-items-center gap-2">
+        <fa-icon [icon]="faCircleInfo"></fa-icon>
+        <span>Operations Dispatch Note</span>
+      </div>
+      <div class="text-secondary">{{ flight.remarks }}</div>
+    </div>
+    }
+  </div>
   } @else {
-    <app-empty-state
-      title="Select a Flight"
-      message="Click on any flight marker on the radar map or select from the flight list to view deep telemetry, route progress, and aircraft status."
-      actionLabel="View Active Flights"
-      (actionClick)="onFocusList()">
-    </app-empty-state>
+  <app-empty-state title="Select a Flight"
+    message="Click on any flight marker on the radar map or select from the flight list to view deep telemetry, route progress, and aircraft status."
+    actionLabel="View Active Flights" (actionClick)="onFocusList()">
+  </app-empty-state>
   }
 </div>

@@ -44,12 +44,8 @@
         <div class="col-fixed">
           <p-button severity="secondary" size="small" [outlined]="true" pTooltip="Reset All Filters"
             tooltipPosition="top" (onClick)="resetFilters()" aria-label="Reset all search filters">
-            <ng-template #default>
-              <div class="flex align-items-center gap-1">
-                <fa-icon [icon]="faFilterCircleXmark"></fa-icon>
-                <span>Reset</span>
-              </div>
-            </ng-template>
+            <fa-icon [icon]="faFilterCircleXmark"></fa-icon>
+            <span>Reset</span>
           </p-button>
         </div>
       </div>
