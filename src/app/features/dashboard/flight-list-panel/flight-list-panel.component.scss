@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.flight-list-panel {
+  background: var(--bg-surface-primary);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.border-subtle {
+  border-color: var(--border-color) !important;
+}
+
+.flight-item-card {
+  background: var(--bg-surface-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.flight-item-card:hover {
+  border-color: var(--color-accent);
+  background: var(--bg-surface-tertiary);
+}
+
+.flight-item-card.selected {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+}
+
+.bg-border {
+  background-color: var(--border-color);
+}

@@ -1,0 +1,301 @@
+@use 'primeflex/primeflex.scss';
+
+:root {
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-family-mono: 'JetBrains Mono', monospace;
+
+  /* Aviation Brand Colors */
+  --color-primary: #0284c7;
+  --color-primary-rgb: 2, 132, 199;
+  --color-accent: #38bdf8;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #06b6d4;
+
+  /* Theme Surfaces (Light default fallback) */
+  --bg-app: #f1f5f9;
+  --bg-surface-primary: #ffffff;
+  --bg-surface-secondary: #f8fafc;
+  --bg-surface-tertiary: #e2e8f0;
+  --border-color: #cbd5e1;
+  --border-subtle: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(203, 213, 225, 0.6);
+  --map-filter: none;
+}
+
+/* Aviation Dark Operations Center (Default & Preferred) */
+html.app-dark {
+  --bg-app: #090d16;
+  --bg-surface-primary: #0f172a;
+  --bg-surface-secondary: #131d31;
+  --bg-surface-tertiary: #1e293b;
+  --border-color: #24344d;
+  --border-subtle: rgba(56, 189, 248, 0.12);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --glass-bg: rgba(15, 23, 42, 0.82);
+  --glass-border: rgba(56, 189, 248, 0.18);
+  --map-filter: brightness(0.85) invert(1) contrast(1.1) hue-rotate(200deg) saturate(0.4);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-mono {
+  font-family: var(--font-family-mono);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* PrimeNG Theme Overrides for Operations Look */
+.p-card {
+  background: var(--bg-surface-primary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+}
+
+.p-card-body {
+  padding: 1rem !important;
+}
+
+.p-inputtext, .p-select {
+  background-color: var(--bg-surface-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  border-radius: 6px !important;
+  transition: all 0.2s ease !important;
+}
+
+.p-inputtext:hover, .p-select:hover {
+  border-color: var(--color-accent) !important;
+}
+
+.p-inputtext:focus, .p-select:focus-within {
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25) !important;
+}
+
+.p-select-overlay {
+  background: var(--bg-surface-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35) !important;
+}
+
+.p-select-option {
+  color: var(--text-primary) !important;
+}
+
+.p-select-option:hover, .p-select-option.p-select-option-selected {
+  background: rgba(56, 189, 248, 0.15) !important;
+  color: #38bdf8 !important;
+}
+
+.p-drawer, .p-sidebar {
+  background: var(--bg-surface-primary) !important;
+  border-left: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Leaflet Custom Marker & Map Styles */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  background-color: #0b111e !important;
+  font-family: var(--font-family) !important;
+}
+
+/* Custom dark tile layer styling */
+.dark-map-tiles {
+  filter: brightness(0.7) invert(1) contrast(1.3) hue-rotate(200deg) saturate(0.3);
+}
+
+.light-map-tiles {
+  filter: saturate(1.1) contrast(1.05);
+}
+
+/* Airplane Marker SVG Container */
+.plane-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  will-change: transform;
+}
+
+.plane-marker-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.plane-icon-wrapper {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid #38bdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+  transition: all 0.25s ease;
+}
+
+.plane-icon-wrapper.selected {
+  border-color: #10b981;
+  box-shadow: 0 0 18px #10b981, 0 0 30px rgba(16, 185, 129, 0.4);
+  transform: scale(1.2);
+}
+
+.plane-icon-wrapper.delayed {
+  border-color: #f59e0b;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+}
+
+.plane-icon-wrapper.landed {
+  border-color: #64748b;
+  box-shadow: 0 0 6px rgba(100, 116, 139, 0.4);
+}
+
+.plane-badge-label {
+  position: absolute;
+  top: -18px;
+  background: rgba(15, 23, 42, 0.9);
+  color: #38bdf8;
+  font-family: var(--font-family-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Airport Node Marker */
+.airport-marker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.airport-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #38bdf8;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+.airport-label {
+  margin-top: 3px;
+  font-family: var(--font-family-mono);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #f8fafc;
+  background: rgba(15, 23, 42, 0.85);
+  padding: 1px 4px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+}
+
+/* Custom Popup Style */
+.leaflet-popup-content-wrapper {
+  background: rgba(15, 23, 42, 0.95) !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border-radius: 10px !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(12px) !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-tip {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+
+/* Radar pulse animation */
+@keyframes radar-pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px rgba(56, 189, 248, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+  }
+}
+
+.radar-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10b981;
+  animation: radar-pulse 2s infinite;
+}
+
+.radar-live-dot.delayed {
+  background-color: #f59e0b;
+  animation: radar-pulse 1.5s infinite;
+}
+
+/* Glassmorphism Panels */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+}

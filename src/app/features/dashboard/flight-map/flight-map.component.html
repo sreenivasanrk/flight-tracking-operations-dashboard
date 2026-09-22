@@ -1,0 +1,52 @@
+<div class="flight-map-container relative w-full h-full overflow-hidden">
+  <!-- Leaflet Map Canvas -->
+  <div #mapContainer class="map-viewport w-full h-full"></div>
+
+  <!-- Map Floating Control Overlay -->
+  <div class="map-overlay-controls absolute top-0 right-0 p-3 z-3 flex flex-column gap-2 pointer-events-auto">
+    <!-- Recenter Global View -->
+    <p-button
+      icon="pi pi-globe"
+      [rounded]="true"
+      severity="secondary"
+      size="small"
+      pTooltip="Reset to Global View"
+      tooltipPosition="left"
+      (onClick)="resetMapView()">
+    </p-button>
+
+    <!-- Toggle Airport Hubs Layer -->
+    <p-button
+      icon="pi pi-building"
+      [rounded]="true"
+      [severity]="showAirports() ? 'info' : 'secondary'"
+      size="small"
+      pTooltip="Toggle Airport Hubs"
+      tooltipPosition="left"
+      (onClick)="toggleAirportsLayer()">
+    </p-button>
+
+    <!-- Toggle Route Trajectories -->
+    <p-button
+      icon="pi pi-share-alt"
+      [rounded]="true"
+      [severity]="showRoutes() ? 'info' : 'secondary'"
+      size="small"
+      pTooltip="Toggle Route Lines"
+      tooltipPosition="left"
+      (onClick)="toggleRoutesLayer()">
+    </p-button>
+  </div>
+
+  <!-- Flight Count & Radar Status Badge -->
+  <div class="map-radar-badge absolute bottom-0 left-0 m-3 z-3 glass-panel px-3 py-2 border-round-lg flex align-items-center gap-3">
+    <div class="flex align-items-center gap-2">
+      <span class="radar-live-dot"></span>
+      <span class="text-xs font-semibold uppercase tracking-wider text-primary">Live Radar</span>
+    </div>
+    <span class="text-xs text-muted">|</span>
+    <span class="text-xs font-mono text-muted">
+      Tracking <strong class="text-primary">{{ activeFlightCount() }}</strong> flights
+    </span>
+  </div>
+</div>

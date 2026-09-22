@@ -1,0 +1,39 @@
+<div 
+  class="kpi-card-wrapper" 
+  [class.active]="isActive"
+  [class.clickable]="clickable"
+  (click)="onClick()"
+  (keydown.enter)="onClick()"
+  (keydown.space)="onClick(); $event.preventDefault()"
+  [attr.tabindex]="clickable ? 0 : null"
+  [attr.role]="clickable ? 'button' : 'region'"
+  [attr.aria-pressed]="clickable ? isActive : null"
+  [attr.aria-label]="title + ': ' + value">
+  <p-card styleClass="kpi-card-inner">
+    <div class="flex align-items-center justify-content-between">
+      <div>
+        <span class="text-xs uppercase font-semibold tracking-wider text-muted block mb-1">
+          {{ title }}
+        </span>
+        <div class="text-2xl lg:text-3xl font-bold font-mono text-primary flex align-items-baseline gap-2">
+          <span>{{ value }}</span>
+          @if (trend) {
+            <span class="text-xs font-normal font-sans" [ngClass]="trendClass">
+              {{ trend }}
+            </span>
+          }
+        </div>
+        @if (subtitle) {
+          <div class="text-xs text-muted mt-1 font-sans">
+            {{ subtitle }}
+          </div>
+        }
+      </div>
+      <div 
+        class="kpi-icon-badge flex align-items-center justify-content-center text-lg"
+        [ngClass]="colorSchemeClass">
+        <fa-icon [icon]="icon"></fa-icon>
+      </div>
+    </div>
+  </p-card>
+</div>

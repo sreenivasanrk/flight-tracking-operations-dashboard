@@ -1,0 +1,24 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.flight-map-container {
+  border-radius: 10px;
+  background: #090d16;
+  border: 1px solid var(--border-color);
+}
+
+.map-viewport {
+  min-height: 400px;
+}
+
+.map-overlay-controls {
+  background: transparent;
+}
+
+.map-radar-badge {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}

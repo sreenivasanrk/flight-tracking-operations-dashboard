@@ -1,0 +1,70 @@
+@if (kpis$ | async; as kpis) {
+  @if (filters$ | async; as filters) {
+    <div class="grid grid-nogutter gap-3">
+      <!-- Total Flights -->
+      <div class="col-12 sm:col-6 md:col-3 xl:col">
+        <app-kpi-card
+          title="Total Flights"
+          [value]="kpis.total"
+          subtitle="Current filter scope"
+          iconType="plane"
+          colorScheme="sky"
+          [isActive]="filters.status === 'ALL' || !filters.status"
+          (cardClick)="onFilterStatus('ALL')">
+        </app-kpi-card>
+      </div>
+
+      <!-- Active En Route -->
+      <div class="col-12 sm:col-6 md:col-3 xl:col">
+        <app-kpi-card
+          title="Active Flights"
+          [value]="kpis.active"
+          subtitle="En route & approaching"
+          iconType="radar"
+          colorScheme="emerald"
+          [isActive]="filters.status === 'EN_ROUTE'"
+          (cardClick)="onFilterStatus('EN_ROUTE')">
+        </app-kpi-card>
+      </div>
+
+      <!-- Delayed Flights -->
+      <div class="col-12 sm:col-6 md:col-3 xl:col">
+        <app-kpi-card
+          title="Delayed Flights"
+          [value]="kpis.delayed"
+          subtitle="Holding or delayed"
+          iconType="alert"
+          colorScheme="amber"
+          [isActive]="filters.status === 'DELAYED'"
+          (cardClick)="onFilterStatus('DELAYED')">
+        </app-kpi-card>
+      </div>
+
+      <!-- Arrived Flights -->
+      <div class="col-12 sm:col-6 md:col-3 xl:col">
+        <app-kpi-card
+          title="Arrived Flights"
+          [value]="kpis.arrived"
+          subtitle="Landed safely"
+          iconType="check"
+          colorScheme="indigo"
+          [isActive]="filters.status === 'LANDED'"
+          (cardClick)="onFilterStatus('LANDED')">
+        </app-kpi-card>
+      </div>
+
+      <!-- Scheduled Flights -->
+      <div class="col-12 sm:col-6 md:col-3 xl:col">
+        <app-kpi-card
+          title="Scheduled"
+          [value]="kpis.scheduled"
+          subtitle="Awaiting departure"
+          iconType="clock"
+          colorScheme="slate"
+          [isActive]="filters.status === 'SCHEDULED'"
+          (cardClick)="onFilterStatus('SCHEDULED')">
+        </app-kpi-card>
+      </div>
+    </div>
+  }
+}

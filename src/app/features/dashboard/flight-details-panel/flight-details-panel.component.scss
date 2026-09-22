@@ -1,0 +1,34 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.flight-details-panel {
+  background: var(--bg-surface-primary);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+
+.flight-hero-card {
+  background: var(--bg-surface-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.route-progression-card {
+  background: var(--bg-surface-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.instrument-card {
+  background: var(--bg-surface-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.remarks-box {
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.border-subtle {
+  border-color: var(--border-color) !important;
+}

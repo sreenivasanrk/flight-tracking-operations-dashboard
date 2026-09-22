@@ -1,0 +1,54 @@
+.empty-state-container {
+  min-height: 320px;
+  height: 100%;
+}
+
+.radar-scope-graphic {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, rgba(15, 23, 42, 0.4) 70%);
+  border: 1.5px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.15);
+  overflow: hidden;
+}
+
+.radar-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed rgba(56, 189, 248, 0.25);
+}
+
+.ring-1 {
+  width: 70px;
+  height: 70px;
+}
+
+.ring-2 {
+  width: 35px;
+  height: 35px;
+}
+
+.radar-sweep {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: conic-gradient(from 0deg, rgba(56, 189, 248, 0.3) 0deg, transparent 60deg);
+  border-radius: 50%;
+  animation: rotate-sweep 4s linear infinite;
+}
+
+@keyframes rotate-sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.radar-center-icon {
+  position: relative;
+  z-index: 2;
+  color: #38bdf8;
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.6));
+}

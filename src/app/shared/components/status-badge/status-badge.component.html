@@ -1,0 +1,16 @@
+<div class="inline-flex align-items-center gap-2">
+  @if (showPulse && isLiveStatus) {
+    <span 
+      class="radar-live-dot" 
+      [class.delayed]="status === 'DELAYED'"
+      aria-hidden="true">
+    </span>
+  }
+  <p-tag 
+    [value]="formattedLabel" 
+    [severity]="severity"
+    [rounded]="rounded"
+    [style]="customTagStyle"
+    [attr.aria-label]="'Flight status: ' + formattedLabel">
+  </p-tag>
+</div>
